@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Bot, Send, Lock, CreditCard } from "lucide-react";
@@ -109,10 +110,12 @@ const CourseViewer = () => {
                     <div 
                       className="prose prose-sm max-w-none"
                       dangerouslySetInnerHTML={{ 
-                        __html: message.content
-                          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                          .replace(/\n/g, '<br />')
-                          .replace(/• /g, '&bull; ')
+                        __html: DOMPurify.sanitize(
+                          message.content
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                            .replace(/\n/g, '<br />')
+                            .replace(/• /g, '&bull; ')
+                        )
                       }}
                     />
                   </div>
