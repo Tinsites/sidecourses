@@ -1,24 +1,20 @@
 import { Link } from "react-router-dom";
-import { Bot, Github, Twitter } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   const footerLinks = {
     Product: [
       { label: "Features", href: "#features" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "Docs", href: "/docs" },
-      { label: "Changelog", href: "/changelog" },
+      { label: "How It Works", href: "#features" },
     ],
     Company: [
       { label: "About", href: "/about" },
-      { label: "Blog", href: "/blog" },
-      { label: "Careers", href: "/careers" },
       { label: "Contact", href: "/contact" },
     ],
     Legal: [
       { label: "Privacy", href: "/privacy" },
       { label: "Terms", href: "/terms" },
-      { label: "License", href: "/license" },
     ],
   };
 
@@ -29,28 +25,19 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <Bot className="h-6 w-6 text-primary" />
-              <span className="text-lg font-bold gradient-text">LearnAgentAI</span>
+              <img src={logo} alt="Side Courses" className="h-10 w-auto" />
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              Open-source agentic AI platform for creating interactive courses.
+              AI-powered course creation platform for influencers monetizing their knowledge.
             </p>
             <div className="flex items-center gap-4">
               <a
-                href="https://github.com"
+                href="https://wa.me/2349076532797"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground hover:text-accent transition-colors"
               >
-                <Github className="h-5 w-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
+                <MessageCircle className="h-5 w-5" />
               </a>
             </div>
           </div>
@@ -87,10 +74,18 @@ const Footer = () => {
         {/* Bottom */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} LearnAgentAI. Open-source under MIT.
+            © {new Date().getFullYear()} Side Courses. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
-            Built with 💜 using local AI
+            Designed by{" "}
+            <a 
+              href="https://instagram.com/Tinsiteswebsolutions" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-accent hover:text-accent/80 transition-colors font-medium"
+            >
+              @Tinsiteswebsolutions
+            </a>
           </p>
         </div>
       </div>

@@ -3,10 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bot, Mail, Lock, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Lock, AlertCircle, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import logo from "@/assets/logo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -63,18 +64,25 @@ const Login = () => {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
         <div className="relative z-10 flex flex-col justify-center p-12">
           <Link to="/" className="flex items-center gap-3 mb-8">
-            <Bot className="h-10 w-10 text-primary" />
-            <span className="text-2xl font-bold gradient-text">LearnAgentAI</span>
+            <img src={logo} alt="Side Courses" className="h-12 w-auto" />
           </Link>
           <h1 className="text-4xl font-bold mb-4 text-foreground">
             Welcome Back
           </h1>
           <p className="text-muted-foreground text-lg max-w-md">
-            Continue building amazing AI-powered courses with your local agents.
+            Continue building AI-powered courses and monetizing your expertise.
           </p>
         </div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
+        <motion.div 
+          className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div 
+          className="absolute top-1/4 right-1/4 w-64 h-64 bg-accent/10 rounded-full blur-3xl"
+          animate={{ scale: [1.1, 1, 1.1] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
       </div>
 
       {/* Right Panel - Form */}
@@ -86,8 +94,7 @@ const Login = () => {
           className="w-full max-w-md"
         >
           <Link to="/" className="flex items-center gap-2 mb-8 lg:hidden">
-            <Bot className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold gradient-text">LearnAgentAI</span>
+            <img src={logo} alt="Side Courses" className="h-10 w-auto" />
           </Link>
 
           <div className="mb-8">
@@ -153,7 +160,7 @@ const Login = () => {
             <Button
               type="submit"
               variant="hero"
-              className="w-full"
+              className="w-full hover-lift"
               disabled={isLoading}
             >
               {isLoading ? (

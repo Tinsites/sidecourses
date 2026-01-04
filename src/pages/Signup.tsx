@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Bot, Mail, Lock, User, AlertCircle, Loader2, Building, UserCircle } from "lucide-react";
+import { Mail, Lock, User, AlertCircle, Loader2, Building, UserCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import logo from "@/assets/logo.png";
 
 const Signup = () => {
   const [step, setStep] = useState(1);
@@ -65,7 +66,7 @@ const Signup = () => {
 
     toast({
       title: "Account created!",
-      description: `Welcome to LearnAgentAI as a ${role} user.`,
+      description: `Welcome to Side Courses! Start creating your first course.`,
     });
     setIsLoading(false);
     navigate("/dashboard");
@@ -78,22 +79,21 @@ const Signup = () => {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
         <div className="relative z-10 flex flex-col justify-center p-12">
           <Link to="/" className="flex items-center gap-3 mb-8">
-            <Bot className="h-10 w-10 text-primary" />
-            <span className="text-2xl font-bold gradient-text">LearnAgentAI</span>
+            <img src={logo} alt="Side Courses" className="h-12 w-auto" />
           </Link>
           <h1 className="text-4xl font-bold mb-4 text-foreground">
-            Start Creating Today
+            Start Monetizing Your Knowledge
           </h1>
           <p className="text-muted-foreground text-lg max-w-md">
-            Build AI-powered courses with local agents. No cloud costs, full privacy.
+            Turn your expertise into interactive AI chatbot courses that earn while you sleep.
           </p>
 
           <div className="mt-8 space-y-4">
             {[
-              "Upload files, videos, or prompts",
-              "AI agents structure your content",
-              "Deploy as interactive chatbots",
-              "Monetize with built-in payments",
+              "Upload your content (PDFs, videos, notes)",
+              "AI transforms it into chatbot courses",
+              "Deploy instantly with your own URL",
+              "Start earning with built-in payments",
             ].map((feature, index) => (
               <motion.div
                 key={feature}
@@ -102,16 +102,24 @@ const Signup = () => {
                 transition={{ delay: index * 0.1 }}
                 className="flex items-center gap-3"
               >
-                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
+                <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-accent" />
                 </div>
                 <span className="text-sm text-foreground">{feature}</span>
               </motion.div>
             ))}
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+        <motion.div 
+          className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl"
+          animate={{ scale: [1.1, 1, 1.1] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
       </div>
 
       {/* Right Panel - Form */}
@@ -124,14 +132,23 @@ const Signup = () => {
           className="w-full max-w-md"
         >
           <Link to="/" className="flex items-center gap-2 mb-8 lg:hidden">
-            <Bot className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold gradient-text">LearnAgentAI</span>
+            <img src={logo} alt="Side Courses" className="h-10 w-auto" />
           </Link>
 
           {/* Progress Indicator */}
           <div className="flex items-center gap-2 mb-8">
-            <div className={`h-1 flex-1 rounded-full ${step >= 1 ? "bg-primary" : "bg-border"}`} />
-            <div className={`h-1 flex-1 rounded-full ${step >= 2 ? "bg-primary" : "bg-border"}`} />
+            <motion.div 
+              className={`h-1 flex-1 rounded-full transition-colors ${step >= 1 ? "bg-primary" : "bg-border"}`}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+            <motion.div 
+              className={`h-1 flex-1 rounded-full transition-colors ${step >= 2 ? "bg-accent" : "bg-border"}`}
+              initial={{ scaleX: step >= 2 ? 0 : 1 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.3 }}
+            />
           </div>
 
           {step === 1 ? (
@@ -165,7 +182,7 @@ const Signup = () => {
                     <Input
                       id="name"
                       type="text"
-                      placeholder="John Doe"
+                      placeholder="Your name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="pl-10"
@@ -203,7 +220,7 @@ const Signup = () => {
                   </div>
                 </div>
 
-                <Button type="submit" variant="hero" className="w-full">
+                <Button type="submit" variant="hero" className="w-full hover-lift">
                   Continue
                 </Button>
               </form>
@@ -234,48 +251,52 @@ const Signup = () => {
                   onValueChange={(value) => setRole(value as "individual" | "business")}
                   className="grid grid-cols-1 gap-4"
                 >
-                  <Label
-                    htmlFor="individual"
-                    className={`cursor-pointer card-gradient p-4 flex items-start gap-4 transition-all ${
-                      role === "individual" ? "border-primary ring-2 ring-primary/20" : ""
-                    }`}
-                  >
-                    <RadioGroupItem value="individual" id="individual" className="mt-1" />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <UserCircle className="h-5 w-5 text-primary" />
-                        <span className="font-semibold text-foreground">Individual Creator</span>
+                  <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+                    <Label
+                      htmlFor="individual"
+                      className={`cursor-pointer card-gradient p-4 flex items-start gap-4 ${
+                        role === "individual" ? "border-primary ring-2 ring-primary/20" : ""
+                      }`}
+                    >
+                      <RadioGroupItem value="individual" id="individual" className="mt-1" />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <UserCircle className="h-5 w-5 text-primary" />
+                          <span className="font-semibold text-foreground">Creator</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          For influencers and educators. Free with 7% fee on sales.
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Create and monetize courses. Free to use with 7% platform fee on sales.
-                      </p>
-                    </div>
-                  </Label>
+                    </Label>
+                  </motion.div>
 
-                  <Label
-                    htmlFor="business"
-                    className={`cursor-pointer card-gradient p-4 flex items-start gap-4 transition-all ${
-                      role === "business" ? "border-primary ring-2 ring-primary/20" : ""
-                    }`}
-                  >
-                    <RadioGroupItem value="business" id="business" className="mt-1" />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Building className="h-5 w-5 text-accent" />
-                        <span className="font-semibold text-foreground">Business Team</span>
+                  <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+                    <Label
+                      htmlFor="business"
+                      className={`cursor-pointer card-gradient p-4 flex items-start gap-4 ${
+                        role === "business" ? "border-accent ring-2 ring-accent/20" : ""
+                      }`}
+                    >
+                      <RadioGroupItem value="business" id="business" className="mt-1" />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Building className="h-5 w-5 text-accent" />
+                          <span className="font-semibold text-foreground">Business</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          For teams. Training, attendance tracking, and analytics.
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Staff training & attendance tracking. Free tier or $5/mo for full features.
-                      </p>
-                    </div>
-                  </Label>
+                    </Label>
+                  </motion.div>
                 </RadioGroup>
 
                 <div className="flex gap-3">
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1"
+                    className="flex-1 hover-lift"
                     onClick={() => setStep(1)}
                   >
                     Back
@@ -283,7 +304,7 @@ const Signup = () => {
                   <Button
                     type="submit"
                     variant="hero"
-                    className="flex-1"
+                    className="flex-1 hover-lift"
                     disabled={isLoading}
                   >
                     {isLoading ? (

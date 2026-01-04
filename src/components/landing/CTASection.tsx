@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CTASection = () => {
@@ -18,30 +18,30 @@ const CTASection = () => {
           className="max-w-3xl mx-auto text-center"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
-            Ready to Build Your{" "}
-            <span className="gradient-text">AI Courses</span>?
+            Ready to Monetize Your{" "}
+            <span className="gradient-text">Knowledge</span>?
           </h2>
           <p className="text-lg text-muted-foreground mb-10">
-            Join thousands of creators using LearnAgentAI to create, deploy, and monetize 
-            AI-powered educational content.
+            Join creators using Side Courses to turn their expertise into 
+            interactive AI chatbot courses that earn while they sleep.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="hero" size="xl" asChild>
-              <Link to="/signup" className="flex items-center gap-2">
+            <Button variant="hero" size="xl" asChild className="hover-lift w-full sm:w-auto">
+              <Link to="/signup" className="flex items-center justify-center gap-2">
                 Get Started Free
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="outline" size="xl" asChild>
+            <Button variant="outline" size="xl" asChild className="hover-lift w-full sm:w-auto">
               <a 
-                href="https://github.com" 
+                href="https://wa.me/2349076532797" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-2"
               >
-                <Github className="h-5 w-5" />
-                Star on GitHub
+                <MessageCircle className="h-5 w-5" />
+                Chat on WhatsApp
               </a>
             </Button>
           </div>

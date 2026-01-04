@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import CourseBuilder from "./pages/CourseBuilder";
 import CoursePreview from "./pages/CoursePreview";
 import CourseViewer from "./pages/CourseViewer";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,15 @@ const App = () => (
             <Route path="/courses/new" element={<CourseBuilder />} />
             <Route path="/courses/:id/preview" element={<CoursePreview />} />
             <Route path="/c/:slug" element={<CourseViewer />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<Contact />} />
+            <Route path="/privacy" element={<Contact />} />
+            <Route path="/terms" element={<Contact />} />
+            <Route path="/courses" element={<Dashboard />} />
+            <Route path="/analytics" element={<Dashboard />} />
+            <Route path="/settings" element={<Dashboard />} />
+            <Route path="/attendance" element={<Dashboard />} />
+            <Route path="/courses/:id/edit" element={<CourseBuilder />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
