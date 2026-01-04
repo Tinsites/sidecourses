@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useState} from "react";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -24,7 +24,6 @@ type Message = {
 
 const CoursePreview = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -36,7 +35,7 @@ const CoursePreview = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
-  const [slug, setSlug] = useState("intro-to-ml");
+  const [slug] = useState("intro-to-ml");
   const [copied, setCopied] = useState(false);
 
   const handleSend = async () => {
@@ -52,7 +51,6 @@ const CoursePreview = () => {
     setInput("");
     setIsTyping(true);
 
-    // Simulate AI response
     setTimeout(() => {
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -81,7 +79,6 @@ const CoursePreview = () => {
   const handlePublish = async () => {
     setIsPublishing(true);
     
-    // Simulate publishing
     setTimeout(() => {
       setIsPublishing(false);
       toast({
@@ -102,9 +99,9 @@ const CoursePreview = () => {
   };
 
   return (
-    <div className="min-h-screen dark flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-50 glass border-b border-border/50">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" asChild>
@@ -113,7 +110,7 @@ const CoursePreview = () => {
               </Link>
             </Button>
             <div>
-              <h1 className="font-semibold">Introduction to Machine Learning</h1>
+              <h1 className="font-semibold text-foreground">Introduction to Machine Learning</h1>
               <p className="text-xs text-muted-foreground">Preview Mode</p>
             </div>
           </div>
@@ -148,7 +145,6 @@ const CoursePreview = () => {
       <div className="flex-1 flex">
         {/* Chat Preview */}
         <div className="flex-1 flex flex-col">
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto p-6">
             <div className="max-w-2xl mx-auto space-y-6">
               <AnimatePresence mode="popLayout">
@@ -171,11 +167,11 @@ const CoursePreview = () => {
                       className={`max-w-[80%] p-4 rounded-2xl ${
                         message.role === "user"
                           ? "bg-primary text-primary-foreground rounded-br-md"
-                          : "card-gradient rounded-bl-md"
+                          : "bg-card border border-border rounded-bl-md"
                       }`}
                     >
                       <div 
-                        className="prose prose-sm prose-invert max-w-none"
+                        className="prose prose-sm max-w-none"
                         dangerouslySetInnerHTML={{ 
                           __html: message.content
                             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -188,7 +184,6 @@ const CoursePreview = () => {
                 ))}
               </AnimatePresence>
 
-              {/* Typing indicator */}
               {isTyping && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -198,7 +193,7 @@ const CoursePreview = () => {
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
                     <Bot className="h-5 w-5 text-primary-foreground" />
                   </div>
-                  <div className="card-gradient rounded-2xl rounded-bl-md p-4">
+                  <div className="bg-card border border-border rounded-2xl rounded-bl-md p-4">
                     <div className="flex gap-1">
                       <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
                       <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-100" />
@@ -210,8 +205,7 @@ const CoursePreview = () => {
             </div>
           </div>
 
-          {/* Input */}
-          <div className="p-4 border-t border-border/50">
+          <div className="p-4 border-t border-border">
             <div className="max-w-2xl mx-auto flex gap-2">
               <Input
                 value={input}
@@ -228,9 +222,9 @@ const CoursePreview = () => {
         </div>
 
         {/* Sidebar */}
-        <aside className="w-80 glass border-l border-border/50 p-6 space-y-6 hidden lg:block">
+        <aside className="w-80 bg-card border-l border-border p-6 space-y-6 hidden lg:block">
           <div>
-            <h3 className="font-semibold mb-3">Course Link</h3>
+            <h3 className="font-semibold mb-3 text-foreground">Course Link</h3>
             <div className="flex gap-2">
               <Input
                 value={`/c/${slug}`}
@@ -248,21 +242,21 @@ const CoursePreview = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3">Settings</h3>
+            <h3 className="font-semibold mb-3 text-foreground">Settings</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
-                <span className="text-sm">Paywall</span>
+                <span className="text-sm text-foreground">Paywall</span>
                 <span className="text-sm text-primary">$9.99</span>
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
-                <span className="text-sm">Status</span>
+                <span className="text-sm text-foreground">Status</span>
                 <span className="text-sm text-muted-foreground">Draft</span>
               </div>
             </div>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3">Quick Actions</h3>
+            <h3 className="font-semibold mb-3 text-foreground">Quick Actions</h3>
             <div className="space-y-2">
               <Button variant="outline" className="w-full justify-start" asChild>
                 <Link to={`/c/${slug}`} target="_blank">
