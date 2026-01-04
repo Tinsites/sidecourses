@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   Bot, 
@@ -24,58 +24,129 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
-// Mock data
-const mockCourses = [
-  {
-    id: "1",
-    title: "Introduction to Machine Learning",
-    students: 245,
-    revenue: 1225,
-    status: "published",
-    updatedAt: "2 hours ago",
-  },
-  {
-    id: "2",
-    title: "Business Analytics Fundamentals",
-    students: 189,
-    revenue: 945,
-    status: "published",
-    updatedAt: "1 day ago",
-  },
-  {
-    id: "3",
-    title: "Product Management 101",
-    students: 0,
-    revenue: 0,
-    status: "draft",
-    updatedAt: "3 days ago",
-  },
-];
+type Course = {
+  id: string;
+  title: string;
+  status: string;
+  updated_at: string;
+};
+
+type Profile = {
+  full_name: string;
+  role: string;
+  tier: string;
+};
 
 const stats = [
-  { label: "Total Courses", value: "3", icon: BookOpen, change: "+1 this month" },
-  { label: "Total Students", value: "434", icon: Users, change: "+23 this week" },
-  { label: "Revenue", value: "$2,170", icon: DollarSign, change: "+$340 this week" },
-  { label: "Completion Rate", value: "78%", icon: TrendingUp, change: "+5% vs last month" },
+  { label: "Total Courses", value: "0", icon: BookOpen, change: "Create your first" },
+  { label: "Total Students", value: "0", icon: Users, change: "Share your courses" },
+  { label: "Revenue", value: "$0", icon: DollarSign, change: "Start earning" },
+  { label: "Completion Rate", value: "0%", icon: TrendingUp, change: "Track progress" },
 ];
 
 const Dashboard = () => {
-  const [userRole] = useState<"individual" | "business">("individual");
+  const { user, signOut, loading } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/login");
+    }
+  }, [user, loading, navigate]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) return;
+
+      try {
+        // Fetch profile
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("full_name, role, tier")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (profileData) {
+          setProfile(profileData);
+        }
+
+        // Fetch courses
+        const { data: coursesData } = await supabase
+          .from("courses")
+          .select("id, title, status, updated_at")
+          .eq("owner_id", user.id)
+          .order("updated_at", { ascending: false })
+          .limit(5);
+
+        if (coursesData) {
+          setCourses(coursesData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast({
+      title: "Signed out",
+      description: "You've been signed out successfully.",
+    });
+    navigate("/");
+  };
+
+  const formatTimeAgo = (date: string) => {
+    const now = new Date();
+    const then = new Date(date);
+    const diffMs = now.getTime() - then.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+    if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    return `${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
+  };
+
+  if (loading || loadingData) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Bot className="h-12 w-12 text-primary mx-auto animate-pulse" />
+          <p className="text-muted-foreground mt-4">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
+  const initials = displayName.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+  const userRole = profile?.role || "individual";
 
   return (
-    <div className="min-h-screen dark">
+    <div className="min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 h-screen w-64 glass border-r border-border/50 flex flex-col z-50">
-        {/* Logo */}
-        <div className="p-4 border-b border-border/50">
+      <aside className="fixed left-0 top-0 h-screen w-64 bg-card border-r border-border flex flex-col z-50">
+        <div className="p-4 border-b border-border">
           <Link to="/" className="flex items-center gap-2">
             <Bot className="h-8 w-8 text-primary" />
             <span className="text-lg font-bold gradient-text">LearnAgentAI</span>
           </Link>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 p-4 space-y-1">
           <Link
             to="/dashboard"
@@ -123,16 +194,15 @@ const Dashboard = () => {
           </Link>
         </nav>
 
-        {/* User Profile */}
-        <div className="p-4 border-t border-border/50">
+        <div className="p-4 border-t border-border">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-secondary transition-colors">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <span className="text-sm font-medium text-primary-foreground">JD</span>
+                  <span className="text-sm font-medium text-primary-foreground">{initials}</span>
                 </div>
                 <div className="flex-1 text-left">
-                  <div className="text-sm font-medium">John Doe</div>
+                  <div className="text-sm font-medium text-foreground">{displayName}</div>
                   <div className="text-xs text-muted-foreground capitalize">{userRole}</div>
                 </div>
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -146,7 +216,7 @@ const Dashboard = () => {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
               </DropdownMenuItem>
@@ -158,11 +228,10 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="ml-64 p-8">
         <div className="max-w-6xl mx-auto">
-          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-bold mb-1">Dashboard</h1>
-              <p className="text-muted-foreground">Welcome back, John! Here's your overview.</p>
+              <h1 className="text-2xl font-bold mb-1 text-foreground">Dashboard</h1>
+              <p className="text-muted-foreground">Welcome back, {displayName}! Here's your overview.</p>
             </div>
             <Button variant="hero" asChild>
               <Link to="/courses/new" className="flex items-center gap-2">
@@ -172,15 +241,14 @@ const Dashboard = () => {
             </Button>
           </div>
 
-          {/* Free Tier Banner */}
-          {userRole === "business" && (
+          {userRole === "business" && profile?.tier === "free" && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 rounded-xl bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-between"
+              className="mb-6 p-4 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/30 flex items-center justify-between"
             >
               <div>
-                <h3 className="font-semibold mb-1">You're on the Free Plan</h3>
+                <h3 className="font-semibold mb-1 text-foreground">You're on the Free Plan</h3>
                 <p className="text-sm text-muted-foreground">
                   Limited to 5 uploads/month and 40% generation capacity.
                 </p>
@@ -191,7 +259,6 @@ const Dashboard = () => {
             </motion.div>
           )}
 
-          {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {stats.map((stat, index) => (
               <motion.div
@@ -206,23 +273,22 @@ const Dashboard = () => {
                     <stat.icon className="h-5 w-5 text-primary" />
                   </div>
                 </div>
-                <div className="text-2xl font-bold mb-1">{stat.value}</div>
+                <div className="text-2xl font-bold mb-1 text-foreground">{stat.value}</div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
                 <div className="text-xs text-primary mt-2">{stat.change}</div>
               </motion.div>
             ))}
           </div>
 
-          {/* Courses Section */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Recent Courses</h2>
+              <h2 className="text-lg font-semibold text-foreground">Recent Courses</h2>
               <Link to="/courses" className="text-sm text-primary hover:underline">
                 View all
               </Link>
             </div>
 
-            {mockCourses.length === 0 ? (
+            {courses.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -231,7 +297,7 @@ const Dashboard = () => {
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <Upload className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No courses yet</h3>
+                <h3 className="text-lg font-semibold mb-2 text-foreground">No courses yet</h3>
                 <p className="text-muted-foreground mb-6">
                   Create your first AI-powered course in minutes.
                 </p>
@@ -241,7 +307,7 @@ const Dashboard = () => {
               </motion.div>
             ) : (
               <div className="space-y-3">
-                {mockCourses.map((course, index) => (
+                {courses.map((course, index) => (
                   <motion.div
                     key={course.id}
                     initial={{ opacity: 0, x: -20 }}
@@ -253,19 +319,11 @@ const Dashboard = () => {
                       <BookOpen className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium truncate">{course.title}</h3>
+                      <h3 className="font-medium truncate text-foreground">{course.title}</h3>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
-                          <Users className="h-3 w-3" />
-                          {course.students} students
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <DollarSign className="h-3 w-3" />
-                          ${course.revenue}
-                        </span>
-                        <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          {course.updatedAt}
+                          {formatTimeAgo(course.updated_at)}
                         </span>
                       </div>
                     </div>

@@ -5,16 +5,15 @@ import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-gradient-to-b from-secondary/50 to-background">
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse-glow" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse-glow delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/5 to-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
       </div>
 
       {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -23,7 +22,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-border/50 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-8"
           >
             <Sparkles className="h-4 w-4 text-accent" />
             <span className="text-sm text-muted-foreground">Open-source agentic AI platform</span>
@@ -34,7 +33,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-foreground"
           >
             Build AI Chatbot{" "}
             <span className="gradient-text">Courses</span>
@@ -66,11 +65,11 @@ const HeroSection = () => {
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="glass" size="xl" asChild>
-              <Link to="/docs" className="flex items-center gap-2">
+            <Button variant="outline" size="xl" asChild>
+              <a href="#features" className="flex items-center gap-2">
                 <Zap className="h-5 w-5" />
-                View Documentation
-              </Link>
+                Learn More
+              </a>
             </Button>
           </motion.div>
 
@@ -79,7 +78,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border/30"
+            className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border"
           >
             {[
               { value: "100%", label: "Local AI" },
@@ -102,10 +101,9 @@ const HeroSection = () => {
           className="absolute -bottom-20 left-1/2 -translate-x-1/2 hidden lg:block"
         >
           <div className="relative">
-            <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-float">
+            <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-float shadow-xl">
               <Bot className="h-16 w-16 text-primary-foreground" />
             </div>
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-accent blur-2xl opacity-40" />
           </div>
         </motion.div>
       </div>

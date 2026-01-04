@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bot, Send, Lock, CreditCard, ArrowRight } from "lucide-react";
+import { Bot, Send, Lock, CreditCard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Message = {
@@ -28,7 +28,6 @@ const CourseViewer = () => {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    // Paywall check after 3 messages
     if (!isPaid && messageCount >= 3) {
       return;
     }
@@ -44,7 +43,6 @@ const CourseViewer = () => {
     setIsTyping(true);
     setMessageCount(prev => prev + 1);
 
-    // Simulate AI response
     setTimeout(() => {
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -57,21 +55,20 @@ const CourseViewer = () => {
   };
 
   const handlePurchase = () => {
-    // Simulate purchase
     setIsPaid(true);
     setMessageCount(0);
   };
 
   return (
-    <div className="min-h-screen dark flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="glass border-b border-border/50">
+      <header className="bg-card border-b border-border">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
               <Bot className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="font-semibold">Introduction to Machine Learning</span>
+            <span className="font-semibold text-foreground">Introduction to Machine Learning</span>
           </div>
           <div className="text-sm text-muted-foreground">
             Powered by{" "}
@@ -84,7 +81,6 @@ const CourseViewer = () => {
 
       {/* Chat Area */}
       <div className="flex-1 flex flex-col relative">
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-2xl mx-auto space-y-6">
             <AnimatePresence mode="popLayout">
@@ -107,11 +103,11 @@ const CourseViewer = () => {
                     className={`max-w-[80%] p-4 rounded-2xl ${
                       message.role === "user"
                         ? "bg-primary text-primary-foreground rounded-br-md"
-                        : "card-gradient rounded-bl-md"
+                        : "bg-card border border-border rounded-bl-md"
                     }`}
                   >
                     <div 
-                      className="prose prose-sm prose-invert max-w-none"
+                      className="prose prose-sm max-w-none"
                       dangerouslySetInnerHTML={{ 
                         __html: message.content
                           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -133,7 +129,7 @@ const CourseViewer = () => {
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
                   <Bot className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <div className="card-gradient rounded-2xl rounded-bl-md p-4">
+                <div className="bg-card border border-border rounded-2xl rounded-bl-md p-4">
                   <div className="flex gap-1">
                     <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
                     <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-100" />
@@ -157,12 +153,12 @@ const CourseViewer = () => {
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="card-gradient p-8 max-w-md text-center"
+                className="bg-card border border-border rounded-xl p-8 max-w-md text-center shadow-xl"
               >
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-6">
                   <Lock className="h-8 w-8 text-primary-foreground" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2">Unlock Full Course</h2>
+                <h2 className="text-2xl font-bold mb-2 text-foreground">Unlock Full Course</h2>
                 <p className="text-muted-foreground mb-6">
                   You've reached the preview limit. Purchase to continue learning with unlimited access.
                 </p>
@@ -184,8 +180,7 @@ const CourseViewer = () => {
           )}
         </AnimatePresence>
 
-        {/* Input */}
-        <div className="p-4 border-t border-border/50">
+        <div className="p-4 border-t border-border">
           <div className="max-w-2xl mx-auto flex gap-2">
             <Input
               value={input}

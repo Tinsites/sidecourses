@@ -4,8 +4,8 @@ import { Bot, Github, Twitter } from "lucide-react";
 const Footer = () => {
   const footerLinks = {
     Product: [
-      { label: "Features", href: "/features" },
-      { label: "Pricing", href: "/pricing" },
+      { label: "Features", href: "#features" },
+      { label: "Pricing", href: "#pricing" },
       { label: "Docs", href: "/docs" },
       { label: "Changelog", href: "/changelog" },
     ],
@@ -23,7 +23,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="border-t border-border/50 py-12">
+    <footer className="border-t border-border py-12 bg-background">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
@@ -58,16 +58,25 @@ const Footer = () => {
           {/* Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4 className="font-semibold mb-4">{title}</h4>
+              <h4 className="font-semibold mb-4 text-foreground">{title}</h4>
               <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      to={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.href.startsWith("#") ? (
+                      <a
+                        href={link.href}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -76,7 +85,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom */}
-        <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} LearnAgentAI. Open-source under MIT.
           </p>

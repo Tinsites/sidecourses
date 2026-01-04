@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 
 const CTASection = () => {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-24 relative overflow-hidden bg-background">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent" />
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -17,7 +17,7 @@ const CTASection = () => {
           transition={{ duration: 0.5 }}
           className="max-w-3xl mx-auto text-center"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
             Ready to Build Your{" "}
             <span className="gradient-text">AI Courses</span>?
           </h2>
@@ -33,7 +33,7 @@ const CTASection = () => {
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="glass" size="xl" asChild>
+            <Button variant="outline" size="xl" asChild>
               <a 
                 href="https://github.com" 
                 target="_blank" 

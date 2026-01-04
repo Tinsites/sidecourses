@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 type UploadedFile = {
   name: string;
@@ -40,10 +41,16 @@ const CourseBuilder = () => {
   const [prompt, setPrompt] = useState("");
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
   const [isDragOver, setIsDragOver] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/login");
+    }
+  }, [user, loading, navigate]);
 
   const agentSteps: AgentStep[] = [
     {
@@ -142,7 +149,6 @@ const CourseBuilder = () => {
   };
 
   const handleGenerate = async () => {
-    // Validation
     if (!title.trim()) {
       toast({
         title: "Title required",
@@ -162,11 +168,9 @@ const CourseBuilder = () => {
     }
 
     setIsGenerating(true);
-    setCurrentStep(0);
 
     // Simulate agent flow
     for (let i = 0; i < steps.length; i++) {
-      setCurrentStep(i);
       setSteps(prev => prev.map((step, idx) => ({
         ...step,
         status: idx < i ? "complete" : idx === i ? "running" : "pending",
@@ -187,10 +191,18 @@ const CourseBuilder = () => {
     }, 1000);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Bot className="h-12 w-12 text-primary animate-pulse" />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen dark">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 glass border-b border-border/50">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" asChild>
@@ -199,7 +211,7 @@ const CourseBuilder = () => {
               </Link>
             </Button>
             <div>
-              <h1 className="font-semibold">Create New Course</h1>
+              <h1 className="font-semibold text-foreground">Create New Course</h1>
               <p className="text-xs text-muted-foreground">AI-powered course builder</p>
             </div>
           </div>
@@ -227,7 +239,6 @@ const CourseBuilder = () => {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Left Panel - Input */}
           <div className="space-y-6">
-            {/* Course Title */}
             <div className="space-y-2">
               <Label htmlFor="title">Course Title</Label>
               <Input
@@ -239,7 +250,6 @@ const CourseBuilder = () => {
               />
             </div>
 
-            {/* File Upload */}
             <div className="space-y-2">
               <Label>Upload Content (Optional)</Label>
               <div
@@ -248,7 +258,7 @@ const CourseBuilder = () => {
                 onDrop={handleDrop}
                 className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${
                   isDragOver
-                    ? "border-primary bg-primary/10"
+                    ? "border-primary bg-primary/5"
                     : "border-border hover:border-primary/50"
                 }`}
               >
@@ -262,13 +272,12 @@ const CourseBuilder = () => {
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <Upload className="h-8 w-8 text-primary" />
                 </div>
-                <p className="font-medium mb-1">Drag & drop files here</p>
+                <p className="font-medium mb-1 text-foreground">Drag & drop files here</p>
                 <p className="text-sm text-muted-foreground">
                   PDF, MP4, JPG, PNG up to 100MB
                 </p>
               </div>
 
-              {/* Uploaded Files */}
               <AnimatePresence>
                 {files.length > 0 && (
                   <motion.div
@@ -288,7 +297,7 @@ const CourseBuilder = () => {
                           className="flex items-center gap-3 p-3 rounded-lg bg-secondary"
                         >
                           <FileIcon className="h-4 w-4 text-primary" />
-                          <span className="flex-1 text-sm truncate">{file.name}</span>
+                          <span className="flex-1 text-sm truncate text-foreground">{file.name}</span>
                           <span className="text-xs text-muted-foreground">
                             {formatFileSize(file.size)}
                           </span>
@@ -306,7 +315,6 @@ const CourseBuilder = () => {
               </AnimatePresence>
             </div>
 
-            {/* Prompt */}
             <div className="space-y-2">
               <Label htmlFor="prompt">Describe Your Course (Optional)</Label>
               <Textarea
@@ -330,13 +338,13 @@ const CourseBuilder = () => {
                   <Bot className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <h2 className="font-semibold">AI Agent Pipeline</h2>
+                  <h2 className="font-semibold text-foreground">AI Agent Pipeline</h2>
                   <p className="text-sm text-muted-foreground">Local LangGraph + Ollama</p>
                 </div>
               </div>
 
               <div className="space-y-4">
-                {steps.map((step, index) => (
+                {steps.map((step) => (
                   <motion.div
                     key={step.id}
                     initial={{ opacity: 0.5 }}
@@ -369,7 +377,7 @@ const CourseBuilder = () => {
                       )}
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-medium">{step.name}</h3>
+                      <h3 className="font-medium text-foreground">{step.name}</h3>
                       <p className="text-sm text-muted-foreground">
                         {step.description}
                       </p>
@@ -379,9 +387,8 @@ const CourseBuilder = () => {
               </div>
             </div>
 
-            {/* Info Card */}
             <div className="card-gradient p-6">
-              <h3 className="font-semibold mb-3">How it works</h3>
+              <h3 className="font-semibold mb-3 text-foreground">How it works</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="text-primary">1.</span>

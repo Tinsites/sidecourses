@@ -61,7 +61,7 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section className="py-24 relative" id="features">
+    <section className="py-24 relative bg-background" id="features">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.div
@@ -71,7 +71,7 @@ const FeaturesSection = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Everything You Need to{" "}
             <span className="gradient-text">Create & Sell</span>
           </h2>
@@ -94,7 +94,7 @@ const FeaturesSection = () => {
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <feature.icon className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+              <h3 className="text-lg font-semibold mb-2 text-foreground">{feature.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
                 {feature.description}
               </p>

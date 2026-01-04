@@ -48,7 +48,7 @@ const freeTierLimits = [
 
 const PricingSection = () => {
   return (
-    <section className="py-24 relative" id="pricing">
+    <section className="py-24 relative bg-secondary/30" id="pricing">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.div
@@ -58,7 +58,7 @@ const PricingSection = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Simple, <span className="gradient-text">Transparent</span> Pricing
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -76,7 +76,7 @@ const PricingSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className={`relative card-gradient p-8 ${
-                plan.popular ? "border-primary/50 glow-primary" : ""
+                plan.popular ? "border-primary shadow-lg" : ""
               }`}
             >
               {plan.popular && (
@@ -87,12 +87,12 @@ const PricingSection = () => {
               )}
 
               <div className="mb-6">
-                <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
+                <h3 className="text-xl font-bold mb-1 text-foreground">{plan.name}</h3>
                 <p className="text-muted-foreground text-sm">{plan.description}</p>
               </div>
 
               <div className="mb-6">
-                <span className="text-4xl font-bold">{plan.price}</span>
+                <span className="text-4xl font-bold text-foreground">{plan.price}</span>
                 <span className="text-muted-foreground text-sm ml-1">{plan.priceDetail}</span>
               </div>
 
@@ -100,7 +100,7 @@ const PricingSection = () => {
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
                     <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span className="text-sm">{feature}</span>
+                    <span className="text-sm text-foreground">{feature}</span>
                   </li>
                 ))}
               </ul>
