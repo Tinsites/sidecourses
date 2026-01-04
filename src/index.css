@@ -7,7 +7,7 @@
 @import '@fontsource/inter/600.css';
 @import '@fontsource/inter/700.css';
 
-/* LearnAgentAI Design System - Dark-first with blue/purple accents */
+/* LearnAgentAI Design System - Light theme with blue/purple accents */
 
 @layer base {
   :root {
@@ -21,7 +21,7 @@
     --popover-foreground: 222 47% 11%;
 
     --primary: 222 47% 33%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 220 14% 96%;
     --secondary-foreground: 222 47% 11%;
@@ -30,10 +30,10 @@
     --muted-foreground: 220 9% 46%;
 
     --accent: 263 70% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
@@ -43,19 +43,19 @@
 
     /* Custom tokens */
     --gradient-primary: linear-gradient(135deg, hsl(222, 47%, 33%) 0%, hsl(263, 70%, 50%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(222, 47%, 11%) 0%, hsl(222, 47%, 8%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(220, 14%, 96%) 0%, hsl(220, 14%, 92%) 100%);
-    --glow-primary: 0 0 60px hsl(222, 47%, 33% / 0.3);
-    --glow-accent: 0 0 60px hsl(263, 70%, 50% / 0.3);
+    --gradient-hero: linear-gradient(180deg, hsl(220, 14%, 96%) 0%, hsl(0, 0%, 100%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(220, 14%, 98%) 100%);
+    --glow-primary: 0 4px 20px hsl(222, 47%, 33% / 0.2);
+    --glow-accent: 0 4px 20px hsl(263, 70%, 50% / 0.2);
     
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-background: 220 14% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 222 47% 33%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 222 47% 33%;
   }
 
   .dark {
@@ -69,7 +69,7 @@
     --popover-foreground: 210 40% 98%;
 
     --primary: 222 47% 50%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 222 30% 14%;
     --secondary-foreground: 210 40% 98%;
@@ -78,10 +78,10 @@
     --muted-foreground: 220 14% 60%;
 
     --accent: 263 70% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 30%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
     --border: 222 30% 18%;
     --input: 222 30% 18%;
@@ -96,7 +96,7 @@
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 222 47% 50%;
-    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 222 30% 14%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 222 30% 18%;
@@ -115,8 +115,6 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    background: var(--gradient-hero);
-    min-height: 100vh;
   }
 }
 
@@ -144,7 +142,7 @@
   }
   
   .glass {
-    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+    @apply bg-background/80 backdrop-blur-xl border border-border;
   }
   
   .glow-primary {
@@ -167,18 +165,7 @@
     box-shadow: var(--glow-primary);
   }
   
-  .btn-gradient::before {
-    content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(135deg, hsl(263, 70%, 50%) 0%, hsl(222, 47%, 50%) 100%);
-  }
-  
-  .btn-gradient:hover::before {
-    @apply opacity-100;
-  }
-  
   .card-gradient {
-    background: var(--gradient-card);
-    @apply rounded-xl border border-border/50 backdrop-blur-sm;
+    @apply bg-card rounded-xl border border-border shadow-sm;
   }
 }
