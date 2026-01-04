@@ -1,15 +1,29 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Bot, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, Upload, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-gradient-to-b from-secondary/50 to-background">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-gradient-to-b from-secondary/30 to-background">
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1.2, 1, 1.2],
+            opacity: [0.5, 0.3, 0.5]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
       </div>
 
       {/* Grid Pattern */}
@@ -22,10 +36,10 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-8 hover-lift cursor-default"
           >
             <Sparkles className="h-4 w-4 text-accent" />
-            <span className="text-sm text-muted-foreground">Open-source agentic AI platform</span>
+            <span className="text-sm text-muted-foreground">AI Course Maker for Influencers</span>
           </motion.div>
 
           {/* Main Heading */}
@@ -35,10 +49,10 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-foreground"
           >
-            Build AI Chatbot{" "}
-            <span className="gradient-text">Courses</span>
+            Turn Your Knowledge Into{" "}
+            <span className="gradient-text">Interactive</span>
             <br />
-            <span className="text-muted-foreground">in Minutes</span>
+            <span className="text-muted-foreground">AI Chatbot Courses</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -48,8 +62,8 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
           >
-            Generate interactive chatbot-based courses from your files, videos, or prompts. 
-            Deploy as beautiful websites. Monetize effortlessly.
+            Upload your content—PDFs, videos, or notes—and let AI transform it into 
+            engaging chatbot courses. Monetize your expertise effortlessly.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -59,16 +73,16 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Button variant="hero" size="xl" asChild>
-              <Link to="/signup" className="flex items-center gap-2">
-                Start Building Free
+            <Button variant="hero" size="xl" asChild className="hover-lift w-full sm:w-auto">
+              <Link to="/signup" className="flex items-center justify-center gap-2">
+                Start Creating Free
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="outline" size="xl" asChild>
-              <a href="#features" className="flex items-center gap-2">
+            <Button variant="outline" size="xl" asChild className="hover-lift w-full sm:w-auto">
+              <a href="#features" className="flex items-center justify-center gap-2">
                 <Zap className="h-5 w-5" />
-                Learn More
+                See How It Works
               </a>
             </Button>
           </motion.div>
@@ -78,34 +92,28 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-16 pt-16 border-t border-border"
           >
             {[
-              { value: "100%", label: "Local AI" },
-              { value: "$0", label: "Cloud Costs" },
-              { value: "∞", label: "Possibilities" },
+              { value: "Upload", label: "Your Content", icon: Upload },
+              { value: "AI Creates", label: "Your Course", icon: Sparkles },
+              { value: "You Earn", label: "Passive Income", icon: Zap },
             ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold gradient-text">{stat.value}</div>
+              <motion.div 
+                key={index} 
+                className="text-center hover-lift p-4 rounded-xl"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="flex justify-center mb-2">
+                  <stat.icon className="h-8 w-8 text-accent" />
+                </div>
+                <div className="text-2xl md:text-3xl font-bold gradient-text">{stat.value}</div>
                 <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>
-
-        {/* Floating Bot Illustration */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="absolute -bottom-20 left-1/2 -translate-x-1/2 hidden lg:block"
-        >
-          <div className="relative">
-            <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-float shadow-xl">
-              <Bot className="h-16 w-16 text-primary-foreground" />
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
